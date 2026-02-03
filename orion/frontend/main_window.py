@@ -1,5 +1,6 @@
 import sys
 import csv
+from pathlib import Path
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog, QFileDialog
 from PySide6.QtCore import Qt
 from ..ui.orion_v5 import Ui_mainWindow
@@ -55,22 +56,28 @@ class MainWindow(QMainWindow):
     def import_clicked(self): #import button clicked
         print('import clicked!')
 
-        csv_path, _ = QFileDialog.getOpenFileName(
+        # open dialog
+        selected_path, _ = QFileDialog.getOpenFileName(
             self,
             "Import CSV",
             "",
             "CSV Files (*.csv)"
         )
 
-        if not csv_path:
+        if not selected_path:
             return
 
+        # create Path to csv file
+        csv_path = Path(selected_path)
 
-        csv_path = self.trackerEngine.addCsv(csv_path)
-        print("Csv imported: " + csv_path)
-
-        self.ui.csvList.addItem(csv_path)
+        # add absolute path to engine
+        self.trackerEngine.addCsv(csv_path)
         self.trackerEngine.csvList.append(csv_path)
+        print("Csv imported: " + csv_path.name)
+
+        #add path name to ui 
+        self.ui.csvList.addItem(csv_path.name)
+
 
 
     def graph_clicked(self): #graph button clicked
@@ -100,21 +107,23 @@ class MainWindow(QMainWindow):
             self.ui.stackedWidget.setCurrentIndex(3)
 
 
-    def display_graph(self, path): #display graph with currently selected path
-        current_csv = path
-        if not current_csv:
+    def display_graph(self, csvname): #display graph with currently selected path
+        path = self.trackerEngine.getStoredPath(csvname)
+    
+        if path is None:
             print("No CSV selected.")
             return -1
-        time_x, accel_y = self.trackerEngine.extract(current_csv)
+        time_x, accel_y = self.trackerEngine.extract(path)
         if time_x is None or accel_y is None:
             print("Extraction failed.")
             return
         self.ui.graphWidget.clear()    
         self.ui.graphWidget.plot(time_x, accel_y)
 
-    def display_sheet(self, path): #display sheet with currently selected path
-        current_csv = path
-        if not current_csv:
+    def display_sheet(self, csvname): #display sheet with currently selected path
+        path = self.trackerEngine.getStoredPath(csvname)
+
+        if path is None:
             print("No CSV selected.")
             return -1
         
@@ -122,7 +131,7 @@ class MainWindow(QMainWindow):
         self.ui.sheetWidget.setModel(model)
         self.ui.sheetWidget.horizontalHeader().setStretchLastSection(True)
 
-        with open(current_csv, "r", newline="", encoding="utf-8") as fileInput:
+        with open(path, "r", newline="", encoding="utf-8") as fileInput:
             reader = csv.reader(fileInput)
             for i, row in enumerate(reader):
                 if i == 0:
@@ -133,12 +142,12 @@ class MainWindow(QMainWindow):
                     items = [QStandardItem(field.strip()) for field in row]
                     model.appendRow(items)
 
-    def display_dual(self, path): #display dual-view with currently selected path
-        current_csv = path
-        if not current_csv:
+    def display_dual(self, csvname): #display dual-view with currently selected path
+        path = self.trackerEngine.getStoredPath(csvname)
+        if not path:
             print("No CSV selected.")
             return -1
-        time_x, accel_y = self.trackerEngine.extract(current_csv)
+        time_x, accel_y = self.trackerEngine.extract(path)
         if time_x is None or accel_y is None:
             print("Extraction failed.")
             return
@@ -149,7 +158,7 @@ class MainWindow(QMainWindow):
         self.ui.tableViewDual.setModel(model)
         self.ui.tableViewDual.horizontalHeader().setStretchLastSection(True)
 
-        with open(current_csv, "r", newline="", encoding="utf-8") as fileInput:
+        with open(path, "r", newline="", encoding="utf-8") as fileInput:
             reader = csv.reader(fileInput)
             for i, row in enumerate(reader):
                 if i == 0:
@@ -189,7 +198,7 @@ class MainWindow(QMainWindow):
     def refreshCsvList(self):
         self.ui.csvList.clear()
         for i in self.trackerEngine.getStoredCsvs():
-            self.ui.csvList.addItem(str(i), i)
+            self.ui.csvList.addItem(str(i.name), i)
 
     def openCsvWindow(self):
         print("Opening csv dialog")

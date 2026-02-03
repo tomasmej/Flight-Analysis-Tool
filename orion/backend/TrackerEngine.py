@@ -10,27 +10,31 @@ class TrackerEngine:
 
     def reset(self):
         
-        self.csvList = self.getStoredCsvs()
+        self.csvList = self.getStoredCsvs() # must be absolute paths
         self.df = None
 
     def addCsv(self, file_path):
 
-        source = Path(file_path)
 
         data_dir = Path(__file__).resolve().parent.parent / "data"
         data_dir.mkdir(exist_ok=True)
 
-        destination = data_dir / source.name
-        shutil.copy(source, destination)
+        destination = data_dir / file_path.name
+        shutil.copy(file_path, destination)
 
-        return file_path
+        # return file_path
     
     def getStoredCsvs(self):
         data_dir = Path(__file__).resolve().parent.parent / "data"
         return [f.absolute() for f in data_dir.rglob('*') if f.is_file()]
             
 
-
+    def getStoredPath(self, path_name) -> Path:
+        for i in self.csvList:
+            if i.name == path_name:
+                return i
+        return None
+    
     def extract(self, path):
         try:
             self.df = pd.read_csv(path)
