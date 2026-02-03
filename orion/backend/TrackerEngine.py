@@ -1,5 +1,7 @@
-from PySide6.QtWidgets import QFileDialog
+from PySide6.QtWidgets import QFileDialog, QMessageBox
 import pandas as pd
+from pathlib import Path
+import shutil
 
 class TrackerEngine:
     
@@ -7,24 +9,27 @@ class TrackerEngine:
         self.reset()
 
     def reset(self):
-        self.csvList = []
+        
+        self.csvList = self.getStoredCsvs()
         self.df = None
 
-    def addCsv(self):
-        file_path, _ = QFileDialog.getOpenFileName(
-            None,
-            "Open CSV File",
-            "",
-            "CSV Files (*.csv);;All Files (*)"
-        )
+    def addCsv(self, file_path):
 
-        if not file_path:
-            return
+        source = Path(file_path)
 
+        data_dir = Path(__file__).resolve().parent.parent / "data"
+        data_dir.mkdir(exist_ok=True)
 
-        # print(f"Loaded CSV: {file_path}")
-        # print(f"Rows: {len(self.df)} Columns: {list(self.df.columns)}")
+        destination = data_dir / source.name
+        shutil.copy(source, destination)
+
         return file_path
+    
+    def getStoredCsvs(self):
+        data_dir = Path(__file__).resolve().parent.parent / "data"
+        return [f.absolute() for f in data_dir.rglob('*') if f.is_file()]
+            
+
 
     def extract(self, path):
         try:

@@ -1,6 +1,6 @@
 import sys
 import csv
-from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog
+from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog, QFileDialog
 from PySide6.QtCore import Qt
 from ..ui.orion_v5 import Ui_mainWindow
 from ..ui.ui_profile.profile2 import Ui_Dialog
@@ -19,6 +19,7 @@ class MainWindow(QMainWindow):
         self.connections()
 
         self.trackerEngine = TrackerEngine()
+        self.refreshCsvList()
 
         self.profileEngine = ProfileEngine()
         createDefaultProfile()
@@ -49,9 +50,24 @@ class MainWindow(QMainWindow):
 
     def import_clicked(self): #import button clicked
         print('import clicked!')
-        csv_path = self.trackerEngine.addCsv()
+
+        csv_path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Import CSV",
+            "",
+            "CSV Files (*.csv)"
+        )
+
+        if not csv_path:
+            return
+
+
+        csv_path = self.trackerEngine.addCsv(csv_path)
+        print("Csv imported: " + csv_path)
+
         self.ui.csvList.addItem(csv_path)
         self.trackerEngine.csvList.append(csv_path)
+
 
     def graph_clicked(self): #graph button clicked
         print('Switching to graph view')       
@@ -166,4 +182,8 @@ class MainWindow(QMainWindow):
         self.profileEngine.grabProfiles()
         self.refreshProfileList()
         self.ui.profileList.setCurrentIndex(lastSelectedProfile)
-        
+
+    def refreshCsvList(self):
+        self.ui.csvList.clear()
+        for i in self.trackerEngine.getStoredCsvs():
+            self.ui.csvList.addItem(str(i), i)
