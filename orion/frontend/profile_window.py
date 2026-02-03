@@ -2,7 +2,7 @@ import sys
 import csv
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog, QInputDialog, QLineEdit
 from PySide6.QtCore import Qt
-from ..ui.orion_v5 import Ui_mainWindow
+from ..ui.orion_v6 import Ui_mainWindow
 from ..ui.ui_profile.profile3 import Ui_Dialog
 # from ..backend.TrackerEngine import TrackerEngine
 # from ..backend.ProfileEngine import ProfileEngine

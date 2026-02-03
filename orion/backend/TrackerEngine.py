@@ -47,3 +47,7 @@ class TrackerEngine:
             return
         
         return self.df[time_col], self.df[value_col]
+    
+
+    def activate(self):
+        print("Tracker active")

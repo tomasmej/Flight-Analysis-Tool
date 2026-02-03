@@ -4,11 +4,14 @@ from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget
 from PySide6.QtCore import Qt
 from ..ui.orion_v5 import Ui_mainWindow
 from ..ui.ui_profile.profile2 import Ui_Dialog
+from ..ui.ui_csv.browseCsv import Ui_csvDialog
 from ..backend.TrackerEngine import TrackerEngine
 from ..backend.ProfileEngine import ProfileEngine
 from ..backend.database.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription
 from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel, QPalette, QColor
 from orion.frontend.profile_window import ProfileWindow
+from orion.frontend.csv_window import CsvWindow
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -44,8 +47,9 @@ class MainWindow(QMainWindow):
         self.ui.graphButton.clicked.connect(self.graph_clicked)
         self.ui.sheetButton.clicked.connect(self.sheet_clicked)
         self.ui.resetButton.clicked.connect(self.dual_clicked)
-        self.ui.profileButton.clicked.connect(self.profile_clicked)
+        self.ui.profileButton.clicked.connect(self.openCsvWindow)
         self.ui.configButton.clicked.connect(self.openProfileWindow)
+        
         print('connected')
 
     def import_clicked(self): #import button clicked
@@ -155,8 +159,7 @@ class MainWindow(QMainWindow):
                 else:
                     items = [QStandardItem(field.strip()) for field in row]
                     model.appendRow(items)           
-     
-        
+          
     def profile_clicked(self):
         print("Profiles revealed: ")
         for i in loadProfileNames():
@@ -187,3 +190,9 @@ class MainWindow(QMainWindow):
         self.ui.csvList.clear()
         for i in self.trackerEngine.getStoredCsvs():
             self.ui.csvList.addItem(str(i), i)
+
+    def openCsvWindow(self):
+        print("Opening csv dialog")
+
+        self.csvWindow = CsvWindow(self.trackerEngine, self)
+        self.csvWindow.exec()
