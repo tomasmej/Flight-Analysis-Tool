@@ -20,6 +20,7 @@ class MainWindow(QMainWindow):
         self.ui = Ui_mainWindow()
         self.ui.setupUi(self)
 
+
         self.connections()
 
         self.trackerEngine = TrackerEngine()
