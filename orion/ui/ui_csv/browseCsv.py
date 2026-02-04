@@ -16,8 +16,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
 from PySide6.QtWidgets import (QApplication, QComboBox, QDialog, QHBoxLayout,
-    QListView, QPushButton, QSizePolicy, QVBoxLayout,
-    QWidget)
+    QListWidget, QListWidgetItem, QPushButton, QSizePolicy,
+    QVBoxLayout, QWidget)
 
 class Ui_csvDialog(object):
     def setupUi(self, csvDialog):
@@ -29,27 +29,27 @@ class Ui_csvDialog(object):
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.centralLayout = QVBoxLayout()
         self.centralLayout.setObjectName(u"centralLayout")
-        self.listView = QListView(csvDialog)
-        self.listView.setObjectName(u"listView")
+        self.csvList = QListWidget(csvDialog)
+        self.csvList.setObjectName(u"csvList")
 
-        self.centralLayout.addWidget(self.listView)
+        self.centralLayout.addWidget(self.csvList)
 
         self.csvButtons = QHBoxLayout()
         self.csvButtons.setObjectName(u"csvButtons")
-        self.profileList = QPushButton(csvDialog)
-        self.profileList.setObjectName(u"profileList")
+        self.importButton = QPushButton(csvDialog)
+        self.importButton.setObjectName(u"importButton")
 
-        self.csvButtons.addWidget(self.profileList)
+        self.csvButtons.addWidget(self.importButton)
 
-        self.comboBox = QComboBox(csvDialog)
-        self.comboBox.setObjectName(u"comboBox")
+        self.profileBox = QComboBox(csvDialog)
+        self.profileBox.setObjectName(u"profileBox")
 
-        self.csvButtons.addWidget(self.comboBox)
+        self.csvButtons.addWidget(self.profileBox)
 
-        self.pushButton = QPushButton(csvDialog)
-        self.pushButton.setObjectName(u"pushButton")
+        self.deleteButton = QPushButton(csvDialog)
+        self.deleteButton.setObjectName(u"deleteButton")
 
-        self.csvButtons.addWidget(self.pushButton)
+        self.csvButtons.addWidget(self.deleteButton)
 
         self.csvButtons.setStretch(0, 1)
         self.csvButtons.setStretch(1, 2)
@@ -68,7 +68,7 @@ class Ui_csvDialog(object):
 
     def retranslateUi(self, csvDialog):
         csvDialog.setWindowTitle(QCoreApplication.translate("csvDialog", u"Dialog", None))
-        self.profileList.setText(QCoreApplication.translate("csvDialog", u"Import", None))
-        self.pushButton.setText(QCoreApplication.translate("csvDialog", u"Delete", None))
+        self.importButton.setText(QCoreApplication.translate("csvDialog", u"Import", None))
+        self.deleteButton.setText(QCoreApplication.translate("csvDialog", u"Delete", None))
     # retranslateUi
 

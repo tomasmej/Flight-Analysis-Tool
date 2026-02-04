@@ -23,22 +23,22 @@
    <item>
     <layout class="QVBoxLayout" name="centralLayout">
      <item>
-      <widget class="QListView" name="listView"/>
+      <widget class="QListWidget" name="csvList"/>
      </item>
      <item>
       <layout class="QHBoxLayout" name="csvButtons" stretch="1,2,1">
        <item>
-        <widget class="QPushButton" name="profileList">
+        <widget class="QPushButton" name="importButton">
          <property name="text">
           <string>Import</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QComboBox" name="comboBox"/>
+        <widget class="QComboBox" name="profileBox"/>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="deleteButton">
          <property name="text">
           <string>Delete</string>
          </property>

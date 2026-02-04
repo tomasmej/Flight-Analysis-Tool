@@ -22,9 +22,20 @@ class CsvWindow(QDialog):
         self.ui.setupUi(self)
 
         # self.connections()
-        # self.refreshProfileList()
+        self.refreshAllCsvs()
 
         self.setWindowTitle("CSVs")
         self.setBaseSize(600, 900)
 
-        # self.ui.editBox.setDisabled(True)
+     
+    # def connections(self):
+    #         self.ui.profileList.itemClicked.connect(self.onItemClicked)
+    #         self.ui.newProfileButton.clicked.connect(self.newProfileClicked)
+    #         self.ui.deleteProfileButton.clicked.connect(self.deleteClicked)
+
+    def refreshAllCsvs(self):
+        self.ui.csvList.clear()
+        for i in self.engine.csvList:
+            self.ui.csvList.addItem(str(i.name))
+
+        
