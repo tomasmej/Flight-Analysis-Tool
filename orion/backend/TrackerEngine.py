@@ -2,6 +2,7 @@ from PySide6.QtWidgets import QFileDialog, QMessageBox
 import pandas as pd
 from pathlib import Path
 import shutil
+from .database.database_csv import createNewRecord, loadCsvNames
 
 class TrackerEngine:
     
@@ -22,11 +23,16 @@ class TrackerEngine:
         destination = data_dir / file_path.name
         shutil.copy(file_path, destination)
 
-        # return file_path
+        # add csv to database as record
+        createNewRecord(file_path.name)
     
     def getStoredCsvs(self):
         data_dir = Path(__file__).resolve().parent.parent / "data"
         return [f.absolute() for f in data_dir.rglob('*') if f.is_file()]
+    
+    def getDatabaseStoredCsvs(self):
+        for i in loadCsvNames():
+            print(i)
             
 
     def getStoredPath(self, path_name) -> Path:

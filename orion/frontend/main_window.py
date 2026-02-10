@@ -71,7 +71,7 @@ class MainWindow(QMainWindow):
         # create Path to csv file
         csv_path = Path(selected_path)
 
-        # add absolute path to engine
+        # add absolute path to engine, path name to database
         self.trackerEngine.addCsv(csv_path)
         self.trackerEngine.csvList.append(csv_path)
         print("Csv imported: " + csv_path.name)
@@ -198,7 +198,7 @@ class MainWindow(QMainWindow):
 
     def refreshCsvList(self):
         self.ui.csvList.clear()
-        for i in self.trackerEngine.getStoredCsvs():
+        for i in self.trackerEngine.csvList:
             self.ui.csvList.addItem(str(i.name), i)
 
     def openCsvWindow(self):

@@ -7,6 +7,7 @@ from ..ui.ui_profile.profile2 import Ui_Dialog
 from .database.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription, deleteProfile
 
 
+
 class ProfileEngine:
     
     def __init__(self):

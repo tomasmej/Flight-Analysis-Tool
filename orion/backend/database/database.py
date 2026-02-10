@@ -21,14 +21,15 @@ def database_init():
 ''')
     
     cursor.execute('''
-        CREATE TABLE IF NOT EXISTS records (
+        CREATE TABLE IF NOT EXISTS record (
             recordId INTEGER PRIMARY KEY AUTOINCREMENT,
-            path TEXT UNIQUE NOT NULL, 
-            profileId INTEGER,
-            FOREIGN KEY(profileId) REFERENCES profile(id)
+            name TEXT UNIQUE NOT NULL
         )
                    
 ''')
+
+            # profileId INTEGER,
+            # FOREIGN KEY(profileId) REFERENCES profile(id)
 
     conn.commit()
     
