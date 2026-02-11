@@ -31,6 +31,9 @@ class MainWindow(QMainWindow):
         self.profileEngine.grabProfiles()
         self.refreshProfileList()
 
+        self.setXAttributes(self.ui.profileList.currentText())
+        self.setYAttributes(self.ui.profileList.currentText())
+
 
         # if createDefaultProfile():
         #     self.profileEngine.profileList.append(profileList[0])
@@ -212,3 +215,11 @@ class MainWindow(QMainWindow):
 
     def closeCsvWindow(self):
        self.refreshCsvList()
+
+    def setXAttributes(self, currentProfile):
+        for i in self.profileEngine.grabXAttributes(currentProfile):
+            self.ui.xAttributeBox.addItem(i)
+
+    def setYAttributes(self, currentProfile):
+        for i in self.profileEngine.grabYAttributes(currentProfile):
+            self.ui.yAttributeBox.addItem(i)
