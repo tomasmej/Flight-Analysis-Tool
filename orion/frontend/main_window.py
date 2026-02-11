@@ -205,4 +205,10 @@ class MainWindow(QMainWindow):
         print("Opening csv dialog")
 
         self.csvWindow = CsvWindow(self.trackerEngine, self)
+        self.csvWindow.finished.connect(
+            lambda : self.closeCsvWindow()
+        )
         self.csvWindow.exec()
+
+    def closeCsvWindow(self):
+       self.refreshCsvList()

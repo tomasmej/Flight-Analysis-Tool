@@ -67,6 +67,8 @@ class CsvWindow(QDialog):
         #add path name to ui 
         self.ui.csvList.addItem(csv_path.name)
 
+    
+
     def deleteClicked(self):
         csvName = self.ui.csvList.currentItem().text()
         print("Csv to delete:", csvName)
