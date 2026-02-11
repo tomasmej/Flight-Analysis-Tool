@@ -2,7 +2,7 @@ from PySide6.QtWidgets import QFileDialog, QMessageBox
 import pandas as pd
 from pathlib import Path
 import shutil
-from .database.database_csv import createNewRecord, loadCsvNames
+from .database.database_csv import createNewRecord, loadCsvNames, deleteRecord
 
 class TrackerEngine:
     
@@ -16,15 +16,34 @@ class TrackerEngine:
 
     def addCsv(self, file_path):
 
-
+        # add selected file path.name to local storage
         data_dir = Path(__file__).resolve().parent.parent / "data"
         data_dir.mkdir(exist_ok=True)
-
         destination = data_dir / file_path.name
         shutil.copy(file_path, destination)
 
-        # add csv to database as record
+        # add csv name to database 
         createNewRecord(file_path.name)
+
+   
+    def deleteCsv(self, file_name):
+
+        # delete from local storage
+        path_to_delete = Path(__file__).resolve().parent.parent / "data" / file_name
+        path_to_delete.unlink()
+        print(f"File {file_name} deleted from local storage")
+
+        # delete from engine
+        for path in self.csvList:
+            if path.name == file_name:
+                self.csvList.remove(path)
+
+        # delete from database
+        deleteRecord(file_name)
+
+
+
+
     
     def getStoredCsvs(self):
         data_dir = Path(__file__).resolve().parent.parent / "data"

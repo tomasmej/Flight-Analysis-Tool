@@ -7,6 +7,7 @@ from ..ui.ui_csv.browseCsv import Ui_csvDialog
 # from ..backend.TrackerEngine import TrackerEngine
 # from ..backend.ProfileEngine import ProfileEngine
 from ..backend.database.database import *
+from ..backend.database.database_csv import loadCsvNames
 from orion.frontend.new_profile_dialog import NewProfileDialog
 from pathlib import Path
 
@@ -18,12 +19,13 @@ class CsvWindow(QDialog):
         self.engine = trackerEngine
         self.engine.activate()
     
+        print(loadCsvNames())
 
         self.ui = Ui_csvDialog()
         self.ui.setupUi(self)
 
         self.connections()
-        self.refreshAllCsvs()
+        self.refreshCsvList()
 
         self.setWindowTitle("CSVs")
         self.setBaseSize(600, 900)
@@ -32,9 +34,9 @@ class CsvWindow(QDialog):
     def connections(self):
     #         self.ui.profileList.itemClicked.connect(self.onItemClicked)
             self.ui.importButton.clicked.connect(self.importClicked)
-    #         self.ui.deleteProfileButton.clicked.connect(self.deleteClicked)
+            self.ui.deleteButton.clicked.connect(self.deleteClicked)
 
-    def refreshAllCsvs(self):
+    def refreshCsvList(self):
         self.ui.csvList.clear()
         for i in self.engine.csvList:
             self.ui.csvList.addItem(str(i.name))
@@ -64,3 +66,9 @@ class CsvWindow(QDialog):
 
         #add path name to ui 
         self.ui.csvList.addItem(csv_path.name)
+
+    def deleteClicked(self):
+        csvName = self.ui.csvList.currentItem().text()
+        print("Csv to delete:", csvName)
+        self.engine.deleteCsv(csvName)
+        self.refreshCsvList()

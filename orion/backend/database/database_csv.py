@@ -8,11 +8,24 @@ def createNewRecord(csvname):
             cursor = conn.cursor()
             cursor.execute(
                 "INSERT INTO record (name) VALUES (?)",
-                (csvname,)   # ← comma is EVERYTHING
+                (csvname,)   
             )
         
   except Exception as e:
-      print(f"Error creating default profile: {e}")
+      print(f"Error creating csv record: {e}")
+      raise  
+  
+def deleteRecord(csvname):
+    try:
+        with sqlite3.connect('profiles.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                "DELETE FROM record WHERE name = ?" ,
+                (csvname,)
+            )
+        
+    except Exception as e:
+      print(f"Error deleting rcord with csvname: {e}")
       raise  
   
 def loadCsvNames():
