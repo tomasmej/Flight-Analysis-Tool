@@ -144,7 +144,7 @@ def getProfileXAttributes(profileName):
           cursor.execute("SELECT x_attributes FROM profile WHERE name = ?", (profileName,))
           row = cursor.fetchone()
           retrieved_list = json.loads(row[0])
-          print(retrieved_list)
+        #   print(retrieved_list)
           if retrieved_list is not None:
             return retrieved_list
           else:
@@ -160,7 +160,7 @@ def getProfileYAttributes(profileName):
           cursor.execute("SELECT y_attributes FROM profile WHERE name = ?", (profileName,))
           row = cursor.fetchone()
           retrieved_list = json.loads(row[0])
-          print(retrieved_list)
+        #   print(retrieved_list)
           if retrieved_list is not None:
             return retrieved_list
           else:

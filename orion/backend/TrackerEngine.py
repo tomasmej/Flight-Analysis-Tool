@@ -14,6 +14,7 @@ class TrackerEngine:
         self.csvList = self.getStoredCsvs() # must be absolute paths
         self.df = None
 
+
     def addCsv(self, file_path):
 
         # add selected file path.name to local storage
@@ -44,11 +45,12 @@ class TrackerEngine:
 
 
 
-    
+    # return list of absolute path for each csv in local storage
     def getStoredCsvs(self):
         data_dir = Path(__file__).resolve().parent.parent / "data"
         return [f.absolute() for f in data_dir.rglob('*') if f.is_file()]
     
+    # return list of filenames for each csv record in database, for ui only
     def getDatabaseStoredCsvs(self):
         for i in loadCsvNames():
             print(i)

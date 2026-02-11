@@ -23,24 +23,19 @@ class MainWindow(QMainWindow):
 
         self.connections()
 
+        # Tracker engine handles CSV logic
         self.trackerEngine = TrackerEngine()
         self.refreshCsvList()
 
+        # Profile engine handles profile logic, creates Default profile if it does not exist
         self.profileEngine = ProfileEngine()
-        createDefaultProfile()
+        self.profileEngine.createDefault()
         self.profileEngine.grabProfiles()
         self.refreshProfileList()
 
         self.setXAttributes(self.ui.profileList.currentText())
         self.setYAttributes(self.ui.profileList.currentText())
 
-
-        # if createDefaultProfile():
-        #     self.profileEngine.profileList.append(profileList[0])
-        #     self.ui.profileList.addItem(profileList[0])
-        #     for i in profileList:
-        #         self.profileEngine.profileList.append(i)
-        #         self.ui.profileList.addItem(i)
 
         self.ui.stackedWidget.setCurrentIndex(0)
 
@@ -54,6 +49,8 @@ class MainWindow(QMainWindow):
         self.ui.resetButton.clicked.connect(self.dual_clicked)
         self.ui.profileButton.clicked.connect(self.openCsvWindow)
         self.ui.configButton.clicked.connect(self.openProfileWindow)
+
+        self.ui.profileList.currentTextChanged.connect(self.onProfileSelected)
         
         print('connected')
 
@@ -194,10 +191,18 @@ class MainWindow(QMainWindow):
         )
         self.profileWindow.exec()
         
-    def closeProfileWindow(self, lastSelectedProfile):
+    def closeProfileWindow(self, lastSelectedProfileIndex):
+
+        self.ui.profileList.blockSignals(True)
+
         self.profileEngine.grabProfiles()
         self.refreshProfileList()
-        self.ui.profileList.setCurrentIndex(lastSelectedProfile)
+        self.ui.profileList.setCurrentIndex(lastSelectedProfileIndex)
+
+        self.setXAttributes(self.ui.profileList.currentText())
+        self.setYAttributes(self.ui.profileList.currentText())
+
+        self.ui.profileList.blockSignals(False)
 
     def refreshCsvList(self):
         self.ui.csvList.clear()
@@ -216,10 +221,29 @@ class MainWindow(QMainWindow):
     def closeCsvWindow(self):
        self.refreshCsvList()
 
-    def setXAttributes(self, currentProfile):
-        for i in self.profileEngine.grabXAttributes(currentProfile):
+    def setXAttributes(self, currentProfileName):
+        self.ui.xAttributeBox.clear()
+        for i in self.profileEngine.grabXAttributes(currentProfileName):
             self.ui.xAttributeBox.addItem(i)
+            
+        
 
-    def setYAttributes(self, currentProfile):
-        for i in self.profileEngine.grabYAttributes(currentProfile):
+    def setYAttributes(self, currentProfileName):
+        self.ui.yAttributeBox.clear()
+        for i in self.profileEngine.grabYAttributes(currentProfileName):
             self.ui.yAttributeBox.addItem(i)
+            
+
+
+    def onProfileSelected(self, selectedProfileName):
+
+        if not selectedProfileName:
+            print(f"Profile {selectedProfileName} not found")
+            return
+
+        print(f"Selected profile {selectedProfileName}")
+        self.setXAttributes(selectedProfileName)
+        self.setYAttributes(selectedProfileName)
+
+
+
