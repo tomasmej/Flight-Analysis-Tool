@@ -3,7 +3,7 @@ import csv
 from pathlib import Path
 from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog, QFileDialog
 from PySide6.QtCore import Qt
-from ..ui.orion_v5 import Ui_mainWindow
+from ..ui.orion_v7 import Ui_mainWindow
 from ..ui.ui_profile.profile2 import Ui_Dialog
 from ..ui.ui_csv.browseCsv import Ui_csvDialog
 from ..backend.TrackerEngine import TrackerEngine
