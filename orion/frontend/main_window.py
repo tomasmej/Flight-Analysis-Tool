@@ -84,7 +84,7 @@ class MainWindow(QMainWindow):
     def graph_clicked(self): #graph button clicked
         print('Switching to graph view')       
 
-        if self.display_graph(self.ui.csvList.currentText()) == -1:
+        if self.display_graph(self.ui.csvList.currentText(), self.ui.xAttributeBox.currentText(), self.ui.yAttributeBox.currentText()) == -1:
             self.ui.stackedWidget.setCurrentIndex(0)
         else:
             self.ui.stackedWidget.setCurrentIndex(1)
@@ -102,24 +102,26 @@ class MainWindow(QMainWindow):
     def dual_clicked(self): #dual view button clicked
         print('Switching to dual view')
 
-        if self.display_dual(self.ui.csvList.currentText()) == -1:
+        if self.display_dual(self.ui.csvList.currentText(), self.ui.xAttributeBox.currentText(), self.ui.yAttributeBox.currentText()) == -1:
             self.ui.stackedWidget.setCurrentIndex(0)
         else:
             self.ui.stackedWidget.setCurrentIndex(3)
 
 
-    def display_graph(self, csvname): #display graph with currently selected path
+    def display_graph(self, csvname, xAttribute, yAttribute): #display graph with currently selected path and selected attributes
         path = self.trackerEngine.getStoredPath(csvname)
     
         if path is None:
             print("No CSV selected.")
             return -1
-        time_x, accel_y = self.trackerEngine.extract(path)
-        if time_x is None or accel_y is None:
+            
+        xAxis, yAxis = self.trackerEngine.extract(path, xAttribute, yAttribute)
+        if xAxis is None or yAxis is None:
             print("Extraction failed.")
             return
         self.ui.graphWidget.clear()    
-        self.ui.graphWidget.plot(time_x, accel_y)
+        self.ui.graphWidget.plot(xAxis, yAxis)
+        self.ui.graphWidget.autoRange()
 
     def display_sheet(self, csvname): #display sheet with currently selected path
         path = self.trackerEngine.getStoredPath(csvname)
@@ -143,17 +145,17 @@ class MainWindow(QMainWindow):
                     items = [QStandardItem(field.strip()) for field in row]
                     model.appendRow(items)
 
-    def display_dual(self, csvname): #display dual-view with currently selected path
+    def display_dual(self, csvname, xAttribute, yAttribute): #display dual-view with currently selected path
         path = self.trackerEngine.getStoredPath(csvname)
         if not path:
             print("No CSV selected.")
             return -1
-        time_x, accel_y = self.trackerEngine.extract(path)
-        if time_x is None or accel_y is None:
+        xAxis, yAxis = self.trackerEngine.extract(path, xAttribute, yAttribute)
+        if xAxis is None or yAxis is None:
             print("Extraction failed.")
             return
         self.ui.graphWidgetDual.clear()    
-        self.ui.graphWidgetDual.plot(time_x, accel_y)   
+        self.ui.graphWidgetDual.plot(xAxis, yAxis)   
 
         model = QStandardItemModel()
         self.ui.tableViewDual.setModel(model)

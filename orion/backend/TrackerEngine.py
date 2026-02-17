@@ -62,22 +62,22 @@ class TrackerEngine:
                 return i
         return None
     
-    def extract(self, path):
+    def extract(self, path, xAttribute, yAttribute):
         try:
             self.df = pd.read_csv(path)
         except Exception as e:
             print(f"Failed to read CSV: {e}")
             return None, None
         
-        time_col = "time_elapsed"
-        value_col = "acceleration_y"
+        xAxisColumn = xAttribute
+        yAxisColumn = yAttribute
 
         # __ over ___ function
-        if time_col not in self.df.columns or value_col not in self.df.columns:
-            print(f"Required columns not found: need '{time_col}' and '{value_col}'")
+        if xAxisColumn not in self.df.columns or yAxisColumn not in self.df.columns:
+            print(f"Required columns not found: need '{xAxisColumn}' and '{yAxisColumn}'")
             return
         
-        return self.df[time_col], self.df[value_col]
+        return self.df[xAttribute], self.df[yAttribute]
     
 
     def activate(self):
