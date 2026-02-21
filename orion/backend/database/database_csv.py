@@ -37,3 +37,5 @@ def loadCsvNames():
     except Exception as e:
         print(f"Error fetching csv names: {e}")
         raise
+
+# def reloadAllRecords

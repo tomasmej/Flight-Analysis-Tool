@@ -13,11 +13,14 @@ from pathlib import Path
 
 
 class CsvWindow(QDialog):
-    def __init__(self, trackerEngine, parent=None):
+    def __init__(self, trackerEngine, profileEngine, parent=None):
         super().__init__(parent)
 
         self.engine = trackerEngine
         self.engine.activate()
+
+        self.engine_profile = profileEngine
+        self.engine_profile.activate()
     
         print(loadCsvNames())
 
@@ -26,6 +29,7 @@ class CsvWindow(QDialog):
 
         self.connections()
         self.refreshCsvList()
+        self.refreshProfileList()
 
         self.setWindowTitle("CSVs")
         self.setBaseSize(600, 900)
@@ -40,6 +44,11 @@ class CsvWindow(QDialog):
         self.ui.csvList.clear()
         for i in self.engine.csvList:
             self.ui.csvList.addItem(str(i.name))
+
+    def refreshProfileList(self):
+        self.ui.profileBox.clear()
+        for i in self.engine_profile.profileList:
+            self.ui.profileBox.addItem(i)
 
 
     def importClicked(self): #import button clicked

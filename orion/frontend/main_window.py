@@ -214,7 +214,7 @@ class MainWindow(QMainWindow):
     def openCsvWindow(self):
         print("Opening csv dialog")
 
-        self.csvWindow = CsvWindow(self.trackerEngine, self)
+        self.csvWindow = CsvWindow(self.trackerEngine, self.profileEngine, self)
         self.csvWindow.finished.connect(
             lambda : self.closeCsvWindow()
         )
