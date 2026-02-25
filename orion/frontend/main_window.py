@@ -1,7 +1,7 @@
 import sys
 import csv
 from pathlib import Path
-from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog, QFileDialog
+from PySide6.QtWidgets import QApplication, QWidget, QMainWindow, QStackedWidget, QDialog, QFileDialog, QMessageBox
 from PySide6.QtCore import Qt
 from ..ui.orion_v7 import Ui_mainWindow
 from ..ui.ui_profile.profile2 import Ui_Dialog
@@ -9,10 +9,11 @@ from ..ui.ui_csv.browseCsv import Ui_csvDialog
 from ..backend.TrackerEngine import TrackerEngine
 from ..backend.ProfileEngine import ProfileEngine
 from ..backend.database.database import database_init, createDefaultProfile, loadProfileNames, getProfileDescription
+from ..backend.database.database_csv import verifyDatabaseToDisk
 from PySide6.QtGui import QIcon, QStandardItem, QStandardItemModel, QPalette, QColor
 from orion.frontend.profile_window import ProfileWindow
 from orion.frontend.csv_window import CsvWindow
-
+from ..backend.utils.paths import *
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -32,6 +33,17 @@ class MainWindow(QMainWindow):
         self.profileEngine.createDefault()
         self.profileEngine.grabProfiles()
         self.refreshProfileList()
+
+        data_folder = data_path()
+        # print(data_folder)
+
+        # if database gets recreated with populated data folder already existing, all csvs assigned to master profile
+        if data_folder.exists():
+            if verifyDatabaseToDisk(data_path(), self.trackerEngine.csvList):
+                message = QMessageBox()
+                message.information(QWidget(), "Info", "Database file deleted! All csvs reassigned to Default profile.")
+        else:
+            print("Failed to verify database to disk")
 
         self.setXAttributes(self.ui.profileList.currentText())
         self.setYAttributes(self.ui.profileList.currentText())

@@ -4,6 +4,8 @@ from pathlib import Path
 from PySide6.QtWidgets import QApplication
 from PySide6.QtCore import Qt
 from ..backend.database.database import database_init
+from ..backend.database.database_csv import verifyDatabaseToDisk
+from ..backend.utils.paths import *
 from PySide6.QtGui import QIcon
 from orion.frontend.main_window import MainWindow
 
@@ -19,6 +21,7 @@ def main():
     app.setStyle('Fusion')
     
     database_init()
+
     
     
     window = MainWindow()

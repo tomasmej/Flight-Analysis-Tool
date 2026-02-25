@@ -78,6 +78,7 @@ class TrackerEngine:
             return
         
         return self.df[xAttribute], self.df[yAttribute]
+
     
 
     def activate(self):

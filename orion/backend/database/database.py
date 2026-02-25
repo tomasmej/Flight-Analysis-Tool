@@ -20,6 +20,9 @@ def database_init():
                    
 ''')
     
+    
+
+
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS record (
             recordId INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -283,3 +286,4 @@ def deleteYAttribute(profileName, selectedAttribute):
     except Exception as e:
         print(f"Error fetching y attributes: {e}")
         raise
+
