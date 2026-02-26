@@ -1,6 +1,7 @@
 from pathlib import Path
 import sqlite3
 import json
+import os
 from ..utils.paths import *
 
 
@@ -18,6 +19,8 @@ def createNewRecord(csvname):
   except Exception as e:
       print(f"Error creating csv record: {e}")
       raise  
+  
+
   
 def deleteRecord(csvname):
     try:
@@ -71,8 +74,47 @@ def checkEmpty():
         print(f"Error checking if empty: {e}")
         raise    
 
+
+# Check every csv in disk , ex. a.csv b.csv and c.csv
+# Disk to database checks for csv files deleted from disk and removes those records,
+# and adds records for new csvs added
+# if database was deleted, add back all disk csvs into the new database
+
+# database = {"csv.a", "csv.b", "csv.c"}
+# disk = {"csv.b", "csv.c", "csv.d"}
+
+# to_delete = database.difference(disk) -> csv.a
+# to_add = database.difference(disk) -> csv.d
+
 def verifyDatabaseToDisk(db_path, csvList):
-   if checkEmpty() and not checkIfDiskEmpty(db_path):
+    if checkEmpty() and not checkIfDiskEmpty(db_path):
        repopulateRecords(csvList)
-       return True
-   return False
+       return 
+   
+
+    try:
+        disk_set = set()
+        for path in data_path().iterdir():
+            disk_set.add(path.name)
+
+        db_set = set()
+        for csv_name in loadCsvNames():
+            db_set.add(csv_name)
+
+        to_delete = db_set.difference(disk_set) 
+        to_add = disk_set.difference(db_set) 
+    
+        if to_delete:
+            for name in to_delete:
+                deleteRecord(name)
+
+        if to_add:
+            for name in to_add:
+                createNewRecord(name)
+    except Exception as e:
+        print(f"Error validating database to disk: {e}")
+        raise    
+
+    
+
+

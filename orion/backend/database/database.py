@@ -29,7 +29,10 @@ def database_init():
             name TEXT UNIQUE NOT NULL
         )
                    
+                   
 ''')
+    
+    cursor.execute(''' CREATE INDEX IF NOT EXISTS idx_record_name ON record(name)  ''')
 
             # profileId INTEGER,
             # FOREIGN KEY(profileId) REFERENCES profile(id)

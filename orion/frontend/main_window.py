@@ -41,9 +41,9 @@ class MainWindow(QMainWindow):
         if data_folder.exists():
             if verifyDatabaseToDisk(data_path(), self.trackerEngine.csvList):
                 message = QMessageBox()
-                message.information(QWidget(), "Info", "Database file deleted! All csvs reassigned to Default profile.")
+                message.information(QWidget(), "Info", "Database directory modified or deleted. Csvs have been refactored. ")
         else:
-            print("Failed to verify database to disk")
+            print("No data folder to validate.")
 
         self.setXAttributes(self.ui.profileList.currentText())
         self.setYAttributes(self.ui.profileList.currentText())
